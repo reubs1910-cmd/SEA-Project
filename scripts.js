@@ -31,10 +31,27 @@ const EAST_LOS_HIGH_POSTER_URL =
   "https://static.wikia.nocookie.net/hulu/images/6/64/East_Los_High.jpg";
 
 // This is an array of strings (TV show titles)
-let titles = [
-  "Fresh Prince of Bel Air",
-  "Curb Your Enthusiasm",
-  "East Los High",
+const teamRankings = [
+  { "rank": 1,  "name": "Barcelona",       "form": "WLWWW", "wins": 28, "draws": 4,  "losses": 6,  "logo": "https://media.api-sports.io/football/teams/529.png" },
+  { "rank": 2,  "name": "Real Madrid",     "form": "WWWLW", "wins": 26, "draws": 6,  "losses": 6,  "logo": "https://media.api-sports.io/football/teams/541.png" },
+  { "rank": 3,  "name": "Atletico Madrid", "form": "WWLWD", "wins": 22, "draws": 10, "losses": 6,  "logo": "https://media.api-sports.io/football/teams/530.png" },
+  { "rank": 4,  "name": "Athletic Club",   "form": "LWWWD", "wins": 19, "draws": 13, "losses": 6,  "logo": "https://media.api-sports.io/football/teams/531.png" },
+  { "rank": 5,  "name": "Villarreal",      "form": "WWWWW", "wins": 20, "draws": 10, "losses": 8,  "logo": "https://media.api-sports.io/football/teams/533.png" },
+  { "rank": 6,  "name": "Real Betis",      "form": "DLDDW", "wins": 16, "draws": 12, "losses": 10, "logo": "https://media.api-sports.io/football/teams/543.png" },
+  { "rank": 7,  "name": "Celta Vigo",      "form": "WLWWL", "wins": 16, "draws": 7,  "losses": 15, "logo": "https://media.api-sports.io/football/teams/538.png" },
+  { "rank": 8,  "name": "Rayo Vallecano",  "form": "DWDWW", "wins": 13, "draws": 13, "losses": 12, "logo": "https://media.api-sports.io/football/teams/728.png" },
+  { "rank": 9,  "name": "Osasuna",         "form": "DWWDL", "wins": 12, "draws": 16, "losses": 10, "logo": "https://media.api-sports.io/football/teams/727.png" },
+  { "rank": 10, "name": "Mallorca",        "form": "DLLWL", "wins": 13, "draws": 9,  "losses": 16, "logo": "https://media.api-sports.io/football/teams/798.png" },
+  { "rank": 11, "name": "Real Sociedad",   "form": "LWLLD", "wins": 13, "draws": 7,  "losses": 18, "logo": "https://media.api-sports.io/football/teams/548.png" },
+  { "rank": 12, "name": "Valencia",        "form": "DLLWW", "wins": 11, "draws": 13, "losses": 14, "logo": "https://media.api-sports.io/football/teams/532.png" },
+  { "rank": 13, "name": "Getafe",          "form": "LWLLL", "wins": 11, "draws": 9,  "losses": 18, "logo": "https://media.api-sports.io/football/teams/546.png" },
+  { "rank": 14, "name": "Espanyol",        "form": "WLLLL", "wins": 11, "draws": 9,  "losses": 18, "logo": "https://media.api-sports.io/football/teams/540.png" },
+  { "rank": 15, "name": "Alaves",          "form": "DWWLD", "wins": 10, "draws": 12, "losses": 16, "logo": "https://media.api-sports.io/football/teams/542.png" },
+  { "rank": 16, "name": "Girona",          "form": "LLWLW", "wins": 11, "draws": 8,  "losses": 19, "logo": "https://media.api-sports.io/football/teams/547.png" },
+  { "rank": 17, "name": "Sevilla",         "form": "LLWLD", "wins": 10, "draws": 11, "losses": 17, "logo": "https://media.api-sports.io/football/teams/536.png" },
+  { "rank": 18, "name": "Leganes",         "form": "WWLWD", "wins": 9,  "draws": 13, "losses": 16, "logo": "https://media.api-sports.io/football/teams/537.png" },
+  { "rank": 19, "name": "Las Palmas",      "form": "LLLLL", "wins": 8,  "draws": 8,  "losses": 22, "logo": "https://media.api-sports.io/football/teams/534.png" },
+  { "rank": 20, "name": "Valladolid",      "form": "LLLLL", "wins": 4,  "draws": 4,  "losses": 30, "logo": "https://media.api-sports.io/football/teams/720.png" },
 ];
 // Your final submission should have much more data than this, and
 // you should use more than just an array of strings to store it all.
@@ -45,19 +62,20 @@ function showCards() {
   cardContainer.innerHTML = "";
   const templateCard = document.querySelector(".card");
 
-  for (let i = 0; i < titles.length; i++) {
-    let title = titles[i];
+  for (let i = 0; i < teamRankings.length; i++) {
+    let team = teamRankings[i];
 
     // This part of the code doesn't scale very well! After you add your
     // own data, you'll need to do something totally different here.
     let imageURL = "";
-    if (i == 0) {
+    
+    /*if (i == 0) {
       imageURL = FRESH_PRINCE_URL;
     } else if (i == 1) {
       imageURL = CURB_POSTER_URL;
     } else if (i == 2) {
       imageURL = EAST_LOS_HIGH_POSTER_URL;
-    }
+    }*/
 
     const nextCard = templateCard.cloneNode(true); // Copy the template card
     editCardContent(nextCard, title, imageURL); // Edit title and image
