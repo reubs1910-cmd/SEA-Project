@@ -23,15 +23,8 @@
  *
  */
 
-const FRESH_PRINCE_URL =
-  "https://upload.wikimedia.org/wikipedia/en/3/33/Fresh_Prince_S1_DVD.jpg";
-const CURB_POSTER_URL =
-  "https://m.media-amazon.com/images/M/MV5BZDY1ZGM4OGItMWMyNS00MDAyLWE2Y2MtZTFhMTU0MGI5ZDFlXkEyXkFqcGdeQXVyMDc5ODIzMw@@._V1_FMjpg_UX1000_.jpg";
-const EAST_LOS_HIGH_POSTER_URL =
-  "https://static.wikia.nocookie.net/hulu/images/6/64/East_Los_High.jpg";
-
 // This is an array of strings (TV show titles)
-const teamRankings = [
+let teamRankings = [
   { "rank": 1,  "name": "Barcelona",       "form": "WLWWW", "wins": 28, "draws": 4,  "losses": 6,  "logo": "https://media.api-sports.io/football/teams/529.png" },
   { "rank": 2,  "name": "Real Madrid",     "form": "WWWLW", "wins": 26, "draws": 6,  "losses": 6,  "logo": "https://media.api-sports.io/football/teams/541.png" },
   { "rank": 3,  "name": "Atletico Madrid", "form": "WWLWD", "wins": 22, "draws": 10, "losses": 6,  "logo": "https://media.api-sports.io/football/teams/530.png" },
@@ -53,6 +46,10 @@ const teamRankings = [
   { "rank": 19, "name": "Las Palmas",      "form": "LLLLL", "wins": 8,  "draws": 8,  "losses": 22, "logo": "https://media.api-sports.io/football/teams/534.png" },
   { "rank": 20, "name": "Valladolid",      "form": "LLLLL", "wins": 4,  "draws": 4,  "losses": 30, "logo": "https://media.api-sports.io/football/teams/720.png" },
 ];
+
+const originalRankings = [...teamRankings]; // Store original rankings for reset functionality
+
+let removedTeams = []; // This array will store teams that have been removed from the rankings
 // Your final submission should have much more data than this, and
 // you should use more than just an array of strings to store it all.
 
@@ -64,26 +61,19 @@ function showCards() {
 
   for (let i = 0; i < teamRankings.length; i++) {
     let team = teamRankings[i];
-
-    // This part of the code doesn't scale very well! After you add your
-    // own data, you'll need to do something totally different here.
-    let imageURL = "";
-    
-    /*if (i == 0) {
-      imageURL = FRESH_PRINCE_URL;
-    } else if (i == 1) {
-      imageURL = CURB_POSTER_URL;
-    } else if (i == 2) {
-      imageURL = EAST_LOS_HIGH_POSTER_URL;
-    }*/
+    let imageURL = team.logo;
+    let title = team.name;
+    let rank = team.rank;
+    let form = team.form;
+    let wins = team.wins, draws = team.draws, losses = team.losses;
 
     const nextCard = templateCard.cloneNode(true); // Copy the template card
-    editCardContent(nextCard, title, imageURL); // Edit title and image
+    editCardContent(nextCard, title, imageURL, rank, form, wins, draws, losses); // Edit title and image
     cardContainer.appendChild(nextCard); // Add new card to the container
   }
 }
 
-function editCardContent(card, newTitle, newImageURL) {
+function editCardContent(card, newTitle, newImageURL, rank, form, wins, draws, losses) {
   card.style.display = "block";
 
   const cardHeader = card.querySelector("h2");
@@ -92,6 +82,13 @@ function editCardContent(card, newTitle, newImageURL) {
   const cardImage = card.querySelector("img");
   cardImage.src = newImageURL;
   cardImage.alt = newTitle + " Poster";
+
+  const infoList = card.querySelectorAll("li");
+  infoList[0].textContent = "Rank: " + rank;
+  infoList[1].textContent = "Form: " + form;
+  infoList[2].textContent = "Wins: " + wins;
+  infoList[3].textContent = "Draws: " + draws;
+  infoList[4].textContent = "Losses: " + losses;
 
   // You can use console.log to help you debug!
   // View the output by right clicking on your website,
@@ -102,14 +99,66 @@ function editCardContent(card, newTitle, newImageURL) {
 // This calls the addCards() function when the page is first loaded
 document.addEventListener("DOMContentLoaded", showCards);
 
-function quoteAlert() {
-  console.log("Button Clicked!");
-  alert(
-    "I guess I can kiss heaven goodbye, because it got to be a sin to look this good!",
-  );
+function removeLastCard() {
+  removedTeams.push(teamRankings.pop()); // Remove last item in rankings array and add to removedTeams
+  showCards(); // Call showCards again to refresh
 }
 
-function removeLastCard() {
-  titles.pop(); // Remove last item in titles array
-  showCards(); // Call showCards again to refresh
+function addLastCard() {
+  if (removedTeams.length > 0) {
+    teamRankings.push(removedTeams.pop()); // Add the last removed team back to the rankings
+    showCards(); // Call showCards again to refresh
+  }
+}
+
+// quick sort algorithm to sort teams based on a specified key.
+function quickSortBy(arr, key){
+  if (arr.length <= 1) {
+    return arr;
+  }
+  const pivot = arr[arr.length - 1];
+  const left = [];
+  const right = [];
+  for (let i = 0; i < arr.length - 1; i++) {
+    let team = arr[i];
+    if (key === "name" || key === "rank") { // Sort ascending for names and rank, descending for other keys
+      if (team[key] < pivot[key]) {
+        left.push(team);
+      } else {
+        right.push(team);
+      }
+    } else {
+      if (team[key] > pivot[key]) {
+        left.push(team);
+      } else {
+        right.push(team);
+      }
+    }
+  }
+  return [...quickSortBy(left, key), pivot, ...quickSortBy(right, key)];
+}
+
+// This function prompts the user for a key to sort the 
+function sortBy() {
+  const input = prompt("Enter the key to sort by (rank, name, wins, draws, losses):");
+  if (!["rank", "name", "wins", "draws", "losses"].includes(input)) { // Validate input
+    alert("Invalid key! Please enter one of: rank, name, wins, draws, losses.");
+    return;
+  }
+  teamRankings = quickSortBy(teamRankings, input);
+  showCards();
+}
+
+// This function filters the teamRankings array based on user input and updates the displayed cards accordingly.
+function searchTeam() { 
+  const input = prompt("Enter team name:").toLowerCase();
+  teamRankings = originalRankings.filter(team => 
+    team.name.toLowerCase().includes(input)
+  );
+  showCards();
+}
+
+function resetCards(){
+  teamRankings = [...originalRankings]; // Reset to original rankings
+  showCards();
 }
