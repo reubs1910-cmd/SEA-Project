@@ -140,12 +140,12 @@ function quickSortBy(arr, key){
 
 // This function prompts the user for a key to sort the 
 function sortBy() {
-  const input = prompt("Enter the key to sort by (rank, name, wins, draws, losses):");
-  if (!["rank", "name", "wins", "draws", "losses"].includes(input.toLowerCase())) { // Validate input
+  const input = prompt("Enter the key to sort by (rank, name, wins, draws, losses):").toLowerCase();
+  if (!["rank", "name", "wins", "draws", "losses"].includes(input)) { // Validate input
     alert("Invalid key! Please enter one of: rank, name, wins, draws, losses.");
     return;
   }
-  teamRankings = quickSortBy(teamRankings, input.toLowerCase());
+  teamRankings = quickSortBy(teamRankings, input);
   showCards();
 }
 
